@@ -1,0 +1,155 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "scopeName": "source.basalt",
+  "name": "basalt",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#variable-assignments"
+    },
+    {
+      "include": "#functions"
+    },
+    {
+      "include": "#expressions"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "begin": "#",
+          "end": "\n|$",
+          "name": "comment.line.basalt"
+        }
+      ]
+    },
+    "type-annotations": {
+      "begin": "(?<=[A-Za-z_0-9]) *:(?!:)",
+      "beginCaptures": {
+        "0": { "name": "keyword.operator.type.annotation.basalt" }
+      },
+      "end": ";|=|\\(|\\)|\\{|\\}|$",
+      "patterns": [{ "include": "#typenames" }]
+    },
+    "typenames": {
+      "patterns": [
+        {
+          "include": "#type-atoms"
+        },
+        {
+          "begin": "\\[",
+          "beginCaptures": {
+            "0": { "name": "punctuation.section.brackets.begin.basalt" }
+          },
+          "end": "\\]",
+          "endCaptures": {
+            "0": { "name": "punctuation.section.brackets.end.basalt" }
+          },
+          "patterns": [{ "include": "#typenames" }]
+        }
+      ]
+    },
+    "type-atoms": {
+      "match": "\\b(string|text|number|list|dict|any|void)\\b",
+      "name": "support.type.basalt"
+    },
+    "functions": {
+      "match": "[A-Za-z_][A-Za-z0-9_]*(?=\\()",
+      "name": "entity.name.function.basalt"
+    },
+    "expressions": {
+      "patterns": [
+        {
+          "include": "#variable-scopes"
+        },
+        {
+          "include": "#keywords"
+        },
+        {
+          "include": "#type-annotations"
+        },
+        {
+          "include": "#type-atoms"
+        },
+        {
+          "include": "#operators"
+        },
+        {
+          "include": "#literals"
+        }
+      ]
+    },
+    "literals": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.basalt",
+          "begin": "\"",
+          "end": "\"|\\n",
+          "patterns": [
+            {
+              "name": "constant.character.escape.basalt",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.basalt",
+          "begin": "'",
+          "end": "'|\\n",
+          "patterns": [
+            {
+              "name": "constant.character.escape.basalt",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "constant.language.boolean.basalt",
+          "match": "\\b(true|false)\\b"
+        },
+        {
+          "match": "([A-Za-z_][A-Za-z0-9_]*)\\s*(::)\\s*(?=[A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": { "name": "entity.name.class.basalt" },
+            "2": { "name": "keyword.operator.basalt" }
+          }
+        },
+        {
+          "name": "variable.basalt",
+          "match": "[A-Za-z_][A-Za-z0-9_]*"
+        },
+        {
+          "name": "constant.numeric.basalt",
+          "match": "(0|[1-9][0-9]*)(\\.[0-9]+)?"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.basalt",
+          "match": "\\b(let|event|fn|if|using|ref|return|player|entity|game|variable|as|for|in|to)\\b"
+        },
+        {
+          "name": "keyword.control.basalt",
+          "match": "\\b(default|all_players|all_entities|selection|killer|damager|victim|shooter|projectile|last_entity)\\b"
+        },
+        {
+          "name": "keyword.control.import.basalt",
+          "match": "\\busing\\b"
+        }
+      ]
+    },
+    "variable-scopes": {
+      "name": "punctuation.decorator",
+      "match": "(@line|@thread|@global|@saved)\\b"
+    },
+    "operators": {
+      "name": "keyword.operator",
+      "match": "\\+|-|\\*|\\/|=|!=|<|>|<=|>=|:"
+    }
+  }
+}

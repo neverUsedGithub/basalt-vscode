@@ -1,0 +1,66 @@
+{
+  "name": "basalt-vscode",
+  "main": "dist/extension.js",
+  "private": true,
+  "version": "0.0.1",
+  "publisher": "neverUsedGithub",
+  "type": "commonjs",
+  "scripts": {
+    "build": "bun build --outdir dist --external vscode --format cjs --target node src/extension.ts"
+  },
+  "engines": {
+    "vscode": ">=1.100.0"
+  },
+  "activationEvents": [],
+  "contributes": {
+    "languages": [
+      {
+        "id": "basalt",
+        "configuration": "./language-configuration.json",
+        "aliases": [
+          "Basalt"
+        ],
+        "extensions": [
+          ".basalt"
+        ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "basalt",
+        "scopeName": "source.basalt",
+        "path": "./syntaxes/basalt.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "basalt.lsp.reload",
+        "title": "Basalt: Restart LSP"
+      },
+      {
+        "command": "basalt.runfile",
+        "title": "Basalt: Run File",
+        "icon": "$(play)"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "basalt.runfile",
+          "when": "resourceLangId == basalt",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/vscode": "^1.103.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  }
+}
