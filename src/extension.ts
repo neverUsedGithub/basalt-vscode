@@ -1,13 +1,18 @@
-import * as path from "path";
+import * as path from "node:path";
 import * as vscode from "vscode";
 import type { ExtensionContext } from "vscode";
+import { ItemEditorProvider } from "./item-editor";
 
-import type {
-  LanguageClientOptions,
-  ServerOptions,
-} from "vscode-languageclient/node";
+import type { LanguageClientOptions, ServerOptions } from "vscode-languageclient/node";
 
-import { LanguageClient, TransportKind } from "vscode-languageclient/node";
+import { LanguageClient } from "vscode-languageclient/node";
+
+enum TransportKind {
+  stdio = 0,
+  ipc = 1,
+  pipe = 2,
+  socket = 3,
+}
 
 let client: LanguageClient;
 
@@ -31,17 +36,15 @@ export function activate(context: ExtensionContext) {
   const output = vscode.window.createOutputChannel("Basalt Language Server");
 
   // TODO: change how LSP is resolved
-  const serverModule: string = context.asAbsolutePath(
-    path.join("..", "basalt-lsp", "dist", "index.js")
-  );
+  const serverModule: string = context.asAbsolutePath(path.join("..", "basalt-lsp", "dist", "index.js"));
 
-  context.subscriptions.push(
-    vscode.commands.registerCommand("basalt.lsp.reload", reloadLSP)
-  );
+  context.subscriptions.push(vscode.commands.registerCommand("basalt.lsp.reload", reloadLSP));
 
-  context.subscriptions.push(
-    vscode.commands.registerCommand("basalt.runfile", runFile)
-  );
+  context.subscriptions.push(vscode.commands.registerCommand("basalt.runfile", runFile));
+
+  vscode.window.registerCustomEditorProvider("nbt-mcitem-editor", new ItemEditorProvider(context), {
+    supportsMultipleEditorsPerDocument: false,
+  });
 
   output.appendLine(`Attempting connection to server at: ${serverModule}`);
 
@@ -61,12 +64,7 @@ export function activate(context: ExtensionContext) {
     },
   };
 
-  client = new LanguageClient(
-    "BasaltLSP",
-    "Basalt Language Server",
-    serverOptions,
-    clientOptions
-  );
+  client = new LanguageClient("BasaltLSP", "Basalt Language Server", serverOptions, clientOptions);
 
   client.start();
 }

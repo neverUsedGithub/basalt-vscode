@@ -6,7 +6,8 @@
   "publisher": "neverUsedGithub",
   "type": "commonjs",
   "scripts": {
-    "build": "bun build --outdir dist --external vscode --format cjs --target node src/extension.ts"
+    "build": "esbuild --outfile=dist/extension.js --external:vscode --format=cjs --target=node22 --platform=node --bundle src/extension.ts",
+    "build-editor": "esbuild src/item-editor/index.tsx --outdir=dist/item-editor --target=esnext --platform=browser --bundle --loader:.ttf=file"
   },
   "engines": {
     "vscode": ">=1.100.0"
@@ -51,16 +52,39 @@
           "group": "navigation"
         }
       ]
-    }
+    },
+    "customEditors": [
+      {
+        "viewType": "nbt-mcitem-editor",
+        "displayName": "Item Editor",
+        "selector": [
+          {
+            "filenamePattern": "*.mcitem"
+          }
+        ]
+      }
+    ]
   },
   "devDependencies": {
-    "@types/bun": "latest",
-    "@types/vscode": "^1.103.0"
+    "@types/node": "^24.3.3",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@types/vscode": "^1.103.0",
+    "prettier": "^3.6.2"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
-    "vscode-languageclient": "^9.0.1"
+    "@vscode-elements/react-elements": "^2.3.1",
+    "@vscode/codicons": "^0.0.40",
+    "esbuild": "^0.25.10",
+    "node-stream-zip": "^1.15.0",
+    "pixi.js": "^8.13.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-resizable-panels": "^3.0.6",
+    "vscode-languageclient": "^9.0.1",
+    "zod": "^4.1.8"
   }
 }

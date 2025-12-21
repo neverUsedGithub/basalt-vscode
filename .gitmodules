@@ -1,0 +1,3 @@
+[submodule "basalt-nbt"]
+	path = basalt-nbt
+	url = https://github.com/neverUsedGithub/basalt-nbt
