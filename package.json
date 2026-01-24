@@ -6,7 +6,7 @@
   "publisher": "neverUsedGithub",
   "type": "commonjs",
   "scripts": {
-    "build" :"npm run build-ext && npm run build-editor",
+    "build": "npm run build-ext && npm run build-editor",
     "build-ext": "esbuild --outfile=dist/extension.js --external:vscode --format=cjs --target=node22 --platform=node --bundle src/extension.ts",
     "build-editor": "esbuild src/item-editor/index.tsx --outdir=dist/item-editor --target=esnext --platform=browser --bundle --loader:.ttf=file"
   },
@@ -77,6 +77,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@octokit/rest": "^22.0.1",
     "@vscode-elements/react-elements": "^2.3.1",
     "@vscode/codicons": "^0.0.40",
     "esbuild": "^0.25.10",
