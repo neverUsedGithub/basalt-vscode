@@ -1,0 +1,44 @@
+name: "pre-release"
+
+on:
+  push:
+    branches:
+      - "master"
+
+env:
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  pre-release:
+    name: "Pre-Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: 'recursive'
+
+      - name: Download Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build
+        run: bun run build
+
+      - name: Get version identifiers
+        run: |
+          echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
+          echo "SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Zip release directory
+        run: zip -r pre-release-${{ env.DATE }}-${{ env.SHA }}.zip dist
+
+      - name: Create release
+        run: |
+          gh release create pre-release-${{ env.DATE }}-${{ env.SHA }} \
+            pre-release-${{ env.DATE }}-${{ env.SHA }}.zip \
+            --title "Pre-Release ${{ env.DATE }} (${{ env.SHA }})" \
+            --prerelease \
+            --generate-notes
