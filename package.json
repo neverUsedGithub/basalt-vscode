@@ -11,7 +11,7 @@
     "build-editor": "esbuild src/item-editor/index.tsx --outdir=dist/item-editor --target=esnext --platform=browser --bundle --loader:.ttf=file"
   },
   "engines": {
-    "vscode": ">=1.100.0"
+    "vscode": ">=1.103.0"
   },
   "activationEvents": [],
   "contributes": {

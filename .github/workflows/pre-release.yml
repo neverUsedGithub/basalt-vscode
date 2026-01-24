@@ -24,6 +24,9 @@ jobs:
       - name: Install dependencies
         run: bun install
 
+      - name: Install VSCode extension package
+        run: bun install @vscode/vsce
+
       - name: Build
         run: bun run build
 
@@ -32,13 +35,13 @@ jobs:
           echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
           echo "SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
-      - name: Zip release directory
-        run: zip -r pre-release-${{ env.DATE }}-${{ env.SHA }}.zip dist
+      - name: Create extension file
+        run: bun x @vscode/vsce package -o basalt-vscode-${{ env.DATE }}-${{ env.SHA }}.vsix
 
       - name: Create release
         run: |
           gh release create pre-release-${{ env.DATE }}-${{ env.SHA }} \
-            pre-release-${{ env.DATE }}-${{ env.SHA }}.zip \
+            basalt-vscode-${{ env.DATE }}-${{ env.SHA }}.vsix \
             --title "Pre-Release ${{ env.DATE }} (${{ env.SHA }})" \
             --prerelease \
             --generate-notes
