@@ -6,7 +6,8 @@
   "publisher": "neverUsedGithub",
   "type": "commonjs",
   "scripts": {
-    "build": "esbuild --outfile=dist/extension.js --external:vscode --format=cjs --target=node22 --platform=node --bundle src/extension.ts",
+    "build" :"npm run build-ext && npm run build-editor",
+    "build-ext": "esbuild --outfile=dist/extension.js --external:vscode --format=cjs --target=node22 --platform=node --bundle src/extension.ts",
     "build-editor": "esbuild src/item-editor/index.tsx --outdir=dist/item-editor --target=esnext --platform=browser --bundle --loader:.ttf=file"
   },
   "engines": {
